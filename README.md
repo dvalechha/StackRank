@@ -9,6 +9,26 @@ A local CLI tool that screens resumes against a job description using AI and out
 
 ## Installation
 
+### 1. Create Virtual Environment
+
+It's recommended to use a virtual environment to avoid conflicts with other Python projects.
+
+#### Windows (PC)
+
+```cmd
+python -m venv venv
+venv\Scripts\activate
+```
+
+#### macOS / Linux
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+### 2. Install Dependencies
+
 ```bash
 pip install -r requirements.txt
 ```

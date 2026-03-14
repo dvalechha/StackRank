@@ -97,6 +97,60 @@ If your organization has an internal AI gateway (common in banks/enterprises):
      api_key_env: INTERNAL_OPENAI_KEY
    ```
 
+## Running the Application
+
+### CLI Mode (Phase 1)
+
+#### Windows (PC)
+
+```cmd
+REM Activate virtual environment
+venv\Scripts\activate.bat
+
+REM Run the CLI
+python main.py --jd .\jds\senior_engineer.docx --resumes .\resumes\
+```
+
+Or using PowerShell:
+```powershell
+.\venv\Scripts\Activate.ps1
+python main.py --jd .\jds\senior_engineer.docx --resumes .\resumes\
+```
+
+#### macOS / Linux
+
+```bash
+# Activate virtual environment
+source venv/bin/activate
+
+# Run the CLI
+python main.py --jd ./jds/senior_engineer.docx --resumes ./resumes/
+```
+
+### API Server (Phase 2)
+
+The FastAPI backend allows you to test endpoints via Postman or call from a frontend.
+
+#### Windows (PC)
+
+```cmd
+REM Activate virtual environment and start server
+venv\Scripts\activate.bat
+uvicorn stackrank.api.app:app --reload --port 8000
+```
+
+#### macOS / Linux
+
+```bash
+source venv/bin/activate
+uvicorn stackrank.api.app:app --reload --port 8000
+```
+
+Once running, access:
+- Swagger UI: http://localhost:8000/docs
+- ReDoc: http://localhost:8000/redoc
+- Health Check: http://localhost:8000/health
+
 ## Usage
 
 ```bash

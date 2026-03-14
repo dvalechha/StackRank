@@ -1,0 +1,10 @@
+model:
+  provider: openai_internal
+  endpoint: https://your-internal-endpoint/v1
+  model_name: gpt-4o
+  api_key_env: INTERNAL_OPENAI_KEY
+
+output:
+  folder: ./output
+  json: true
+  markdown: true

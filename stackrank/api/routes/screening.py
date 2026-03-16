@@ -66,13 +66,27 @@ async def screen_resumes(
 
     try:
         # Import Phase 1 modules
-        from stackrank.config_loader import load_config
+        from stackrank.config_loader import get_api_key, load_config
         from stackrank.jd_parser import parse_jd
+        from stackrank.model_client import ModelClient
         from stackrank.resume_parser import parse_resume
-        from stackrank.scorer import score_candidate
+        from stackrank.scorer import Scorer
 
-        # Load config once at startup
-        config = load_config()
+        # Load config - use default path
+        config = load_config("./config.yaml")
+        api_key = get_api_key(config)
+
+        # Initialize model client
+        model_config = config["model"]
+        model_client = ModelClient(
+            provider=model_config["provider"],
+            model_name=model_config["model_name"],
+            api_key=api_key,
+            endpoint=model_config.get("endpoint"),
+        )
+
+        # Initialize scorer
+        scorer = Scorer(model_client)
 
         # Parse JD
         jd_text = parse_jd(job.jd_file_path)
@@ -91,8 +105,11 @@ async def screen_resumes(
                 # Parse resume
                 candidate = parse_resume(resume_temp_path)
 
-                # Score candidate
-                score_result = score_candidate(jd_text, candidate, config)
+                if candidate is None:
+                    continue
+
+                # Score candidate using Scorer class
+                score_result = scorer.score(jd_text, candidate, resume_file.filename)
 
                 results.append(
                     {
@@ -157,8 +174,8 @@ async def screen_resumes(
             job_id=job_id,
             job_title=job.title,
             run_timestamp=datetime.utcnow(),
-            model=config.get("model", "gpt-4o"),
-            provider=config.get("provider", "openai_internal"),
+            model=model_config["model_name"],
+            provider=model_config["provider"],
             total_candidates_evaluated=len(valid_resumes),
             candidates=candidates,
         )
